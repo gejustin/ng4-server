@@ -1,0 +1,32 @@
+{
+  "name": "ng4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/server/main.js",
+    "build": "rm -rf ./build && ./node_modules/.bin/ngc -p tsconfig.json"
+  },
+  "author": "Gary Justin <gejustin1868@gmail.com> (https://github.com/gejustin)",
+  "license": "ISC",
+  "dependencies": {
+    "@angular/common": "4.0.0-rc.5",
+    "@angular/compiler": "^4.0.0-rc.5",
+    "@angular/core": "4.0.0-rc.5",
+    "@angular/forms": "4.0.0-rc.5",
+    "@angular/http": "4.0.0-rc.5",
+    "@angular/platform-browser": "4.0.0-rc.5",
+    "@angular/platform-browser-dynamic": "4.0.0-rc.5",
+    "@angular/platform-server": "4.0.0-rc.5",
+    "@angular/router": "4.0.0-rc.5",
+    "core-js": "2.4.1",
+    "express": "4.15.2",
+    "rxjs": "5.2.0",
+    "zone.js": "0.8.4"
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "^4.0.0-rc.5",
+    "@types/express": "^4.0.35",
+    "typescript": "^2.2.1"
+  }
+}
