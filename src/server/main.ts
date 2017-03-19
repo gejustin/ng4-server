@@ -6,4 +6,4 @@ import { ExpressAppModule } from './express-app';
 
 platformDynamicServer().bootstrapModule(ExpressAppModule);
 
-// new ExpressAppModule().ngDoBootstrap();
+// new ExpressAppModule(null).ngDoBootstrap();

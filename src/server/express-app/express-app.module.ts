@@ -1,37 +1,63 @@
-import { NgModule } from '@angular/core';
+import { StatusModule } from '../status';
+import { NgModule, Injector } from '@angular/core';
 import { ServerModule, renderModule } from '@angular/platform-server';
 import { ServerAppModule } from '../../client';
 import * as express from 'express';
+import * as routingControllers from 'routing-controllers';
+import { Express, Request, Response } from 'express';
 
-const appHtml =
+const document =
     `<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <home></home>
-    </body>
-</html>`;
+        <head>
+            <meta charset="UTF-8">
+            <title>Hello World</title>
+        </head>
+        <body>
+            <home></home>
+        </body>
+    </html>`;
 
 @NgModule({
-    imports: [ServerModule],
+    imports: [
+        StatusModule,
+        ServerModule,
+    ],
 })
 export class ExpressAppModule {
 
+    private app: Express;
+
+    constructor(private injector: Injector) {
+        this.app = express();
+    }
+
     public ngDoBootstrap() {
-        const app = express();
-        app.get('/', this.serverRender(ServerAppModule));
-        app.listen(4000, () => { console.log('app is listening.') })
+        if (this.injector) {
+            this.registerRoutingControllers();
+        }
+
+        this.app.get('/', this.serverRender(ServerAppModule));
+        this.app.listen(4000, () => { console.log('app is listening.') })
+    }
+
+    private registerRoutingControllers() {
+        routingControllers.useContainer(this.injector, {
+            fallback: true,
+            fallbackOnErrors: true,
+        });
+
+        this.app = routingControllers.useExpressServer(this.app, {
+            useClassTransformer: false,
+        });
     }
 
     private serverRender(module: any) {
-        return (req: any, res: any) => {
+        return (req: Request, res: Response) => {
             renderModule(module, {
-                document: appHtml,
+                document,
                 url: req.url,
-            }).then((response) => {
-                res.send(response);
+            }).then((renderedApp: string) => {
+                res.send(renderedApp);
             }).catch(err => console.log.bind(console));
         };
     }
