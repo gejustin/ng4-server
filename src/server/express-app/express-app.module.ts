@@ -1,5 +1,5 @@
 import { StatusModule } from '../status';
-import { NgModule, Injector } from '@angular/core';
+import { NgModule, Injector, NgZone } from '@angular/core';
 import { ServerModule, renderModule } from '@angular/platform-server';
 import { ServerAppModule } from '../../client';
 import * as express from 'express';
@@ -27,7 +27,7 @@ export class ExpressAppModule {
 
     private app: Express;
 
-    constructor(private injector: Injector) {
+    constructor(private ngZone: NgZone, private injector: Injector) {
         this.app = express();
     }
 
@@ -53,12 +53,16 @@ export class ExpressAppModule {
 
     private serverRender(module: any) {
         return (req: Request, res: Response) => {
-            renderModule(module, {
-                document,
-                url: req.url,
+            this.ngZone.runOutsideAngular(function () {
+                return renderModule(module, {
+                    document,
+                    url: req.url,
+                });
             }).then((renderedApp: string) => {
                 res.send(renderedApp);
-            }).catch(err => console.log.bind(console));
+                }).catch((err:any) => {
+                    res.send(err);
+                })
         };
     }
 

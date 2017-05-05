@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/server/main.js",
-    "build": "rm -rf ./build && ./node_modules/.bin/ngc -p tsconfig.json"
+    "build": "rm -rf ./build && ./node_modules/.bin/ngc -p tsconfig.json",
+    "debug": "node-nightly --debug-brk --inspect build/server/main.js"
   },
   "author": "Gary Justin <gejustin1868@gmail.com> (https://github.com/gejustin)",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "@angular/router": "4.0.0-rc.5",
     "core-js": "2.4.1",
     "express": "4.15.2",
+    "reflect-metadata": "^0.1.10",
     "routing-controllers": "^0.6.11",
     "rxjs": "5.2.0",
     "zone.js": "0.8.4"
